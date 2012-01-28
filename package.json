@@ -1,0 +1,29 @@
+{
+    "name": "CraftyBox2d",
+    "version": "0.1",
+    "title": "Crafty Box2D component",
+    "author": {
+        "name": "Jhean Ceballos",
+        "url": "http://zombirriondo.com/"
+    },
+    "licenses": [
+        {
+            "type": "MIT",
+            "url": "http://www.opensource.org/licenses/mit-license.php"
+        },
+        {
+            "type": "GPL",
+            "url": "http://www.opensource.org/licenses/gpl-license.php"
+        }
+    ],
+    "description": "CraftyBox2d is a component that facilitates the use of the Physics Engine Box2D.",
+    "keywords": [
+        "framework",
+        "javascript"
+    ],
+    "jsfiddle" : "http://jsfiddle.net/shogoki_vnz/ksUhA/embedded/", 
+    "homepage": "https://github.com/shogoki-vnz/CraftyBox2D",
+    "files": [
+        "box2d.js"
+    ]
+}
