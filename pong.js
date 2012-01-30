@@ -115,11 +115,9 @@ createPlayerComponents = function(){
 			var dx = 0;
 			
 			if (this.isDown("D")) {
-			  this.x += this.speed;
 			  dx = this.speed;
 			}
 			if (this.isDown("A")) {
-			  this.x -= this.speed;
 			  dx = -1 * this.speed;
 			}
 			
@@ -230,7 +228,7 @@ genterateChars = function(){
 					shape : 'circle'
 				});	
 					
-	
+	ball.body.SetBullet(true);
 	var	fx = (Math.random() > 0.5) ? 2 : -2;
 	var force = new b2Vec2(fx, 1.5);
 	ball.body.ApplyImpulse(force, ball.body.GetWorldCenter());
