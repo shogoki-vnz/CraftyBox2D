@@ -236,7 +236,7 @@ genterateChars = function(){
 	ball.body.ApplyImpulse(force, ball.body.GetWorldCenter());
 	
 	paddle = Crafty.e("2D, Canvas, Color, Box2D, PaddleControls")
-		  .attr({ x: hw-35, y: 580, z: 1, w:70, h:5 })
+		  .attr({ x: hw-35, y: 580, z: 1, w:270, h:5 })
 		  .color("#fff")		  
 		  .box2d({
 						bodyType: 'dynamic',
