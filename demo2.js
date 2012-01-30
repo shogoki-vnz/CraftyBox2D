@@ -8,19 +8,25 @@ gameInit = function(){
         var stageH = 400;
         Crafty.init(stageW, stageH);
         Crafty.canvas.init();
-        Crafty.box2D.init(0, 10, 32, true);
+        var gx=0;
+        var gy=10;
+        var ptm_ratio=32;
+        var doSleep=true;
+        Crafty.box2D.init(gx, gy, ptm_ratio, doSleep);
         Crafty.background("#eee");
         
+        var power_bar_count=16;
+
         Crafty.c("PowerBar", {
 
                 init: function() {
-                        this.attr({ x: (stageW-b_size*6)/2, y: 20, z: 1, w:1, h:b_size })
+                        this.attr({ x: (stageW-b_size*power_bar_count)/2, y: 20, z: 1, w:1, h:b_size })
                         .color("#fff") 
                 },
                 
 
-                PowerBar: function(speed, bar) {
-                        bar.attr({ x: (stageW-b_size*6)/2, y: 20, z: 1, w:speed, h:b_size })
+                PowerBar: function(speed) {
+                        this.attr({ x: (stageW-b_size*power_bar_count)/2, y: 20, z: 1, w:speed, h:b_size })
                         return this;
                 }
         });
@@ -37,7 +43,7 @@ gameInit = function(){
         var blck_cnt = 20;
         var b_size = 10;
         var speed = 1;
-        var speedMax = b_size*6;
+        var speedMax = b_size*power_bar_count;
         var speedUp = false;
         
         
@@ -50,7 +56,7 @@ gameInit = function(){
                                                    bodyType: 'dynamic',
                                                    density : 10,
                                                    friction : 30,
-                                                   restitution : 0
+                                                   restitution : 0.1
                                 });
                 }
         }
@@ -58,7 +64,7 @@ gameInit = function(){
         var PBar = Crafty.e("2D, Canvas, Color, PowerBar")   
         
         var dropper = Crafty.e("2D, Canvas, Color, Mouse")
-                .attr({ x: (stageW-(b_size*6))/2, y: 0, z: 3, w:b_size*6, h:b_size*2 })
+                .attr({ x: (stageW-(b_size*power_bar_count))/2, y: 0, z: 3, w:b_size*power_bar_count, h:b_size*2 })
                 .color("#ccc")
                 .bind("EnterFrame", function(){
                         if(speedUp===true){
@@ -68,7 +74,7 @@ gameInit = function(){
                                 else{
                                         speed =1;
                                 }
-                        PBar.PowerBar(speed, PBar);
+                        PBar.PowerBar(speed);
                         }
                 })
                 .bind("MouseDown", function() {
@@ -93,7 +99,7 @@ gameInit = function(){
                 
                 
         var txt = Crafty.e("2D, Canvas, Text")
-                .attr({ x: (stageW-(b_size*6)+15)/2, y: -5, z: 3, w:b_size*2, h:b_size*2 })
+                .attr({ x: (stageW-(b_size*power_bar_count)+15)/2, y: -5, z: 3, w:b_size*2, h:b_size*2 })
                 .text("Click Here")
                 
 }
