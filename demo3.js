@@ -1,5 +1,4 @@
-/* Author: @shogoki_vnz	
-*/
+/* Author: @shogoki_vnz*/
 var world,
 	PTM_RATIO = 32,
 	w = 600,
