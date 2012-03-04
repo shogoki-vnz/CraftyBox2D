@@ -152,6 +152,25 @@ Crafty.c("Box2D", {
 			return this;
 		}
 	},
+	/**@
+	* #.contact
+	* @comp Box2D
+	* @sign public Boolean/Array contact(String component)
+	* @param component - Check collision with entities that has this component
+	* @return `false` if no collision or the param component don't had the Box2D comp. If a collision is detected, returns an Array of objects that are colliding.
+	* Takes an argument for a component to test collision for. If a collision is found, an array of
+	* every object in collision along with 'contact' info.
+	*
+	* If no collision or the target component don't had the Box2D comp, will return false. The return collision data will be an Array of Objects with the
+	* the object collided and the 'contact' object return from Box2D.
+	* ~~~
+	* [{
+	*    obj: [entity],
+	*    contact: [obj]
+	* }]
+	* ~~~	
+	* @see .onContact
+	*/
 	contact:function(comp){
 		var finalresult = [];
 		var entitys = Crafty(comp);		
@@ -185,6 +204,15 @@ Crafty.c("Box2D", {
 		
 		return (finalresult.length) ? finalresult : false;
 	},
+	/**@
+	* #.onContact
+	* @comp Box2D
+	* @sign public this .onContact(String component, Function hit)
+	* @param component - Component to check collisions for
+	* @param hit - Callback method to execute when collided with component
+	* Creates an enterframe event calling .contact() each time and if collision detected will invoke the callback.
+	* @see .contact
+	*/
 	onContact: function (comp, fn) {
 		this.bind("EnterFrame", function () {
 			var hitdata = this.contact(comp);
