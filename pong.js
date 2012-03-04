@@ -29,35 +29,6 @@ gameInit = function(){
 	//Uncoment this tho see the Box2D DebugInfo
 	//Crafty.box2D.showDebugInfo();
 	
-	//Add the contactlistener and bind the Crafty EnterFrame	
-	var contactListener = new Box2D.Dynamics.b2ContactListener;
-    contactListener.BeginContact = function(contact)
-								   {
-										var myContact = { 
-															fixtureA: contact.GetFixtureA(), 
-															fixtureB: contact.GetFixtureB() 
-														};
-										_contacts.push(myContact);
-								   };
-								   
-	contactListener.EndContact = function(contact)
-								   {										
-										var myContact = { 
-															fixtureA: contact.GetFixtureA(), 
-															fixtureB: contact.GetFixtureB() 
-														};
-										
-										var totalContacts = _contacts.length;
-										for(var i = 0; i < totalContacts; ++i){
-											if ((_contacts[i].fixtureA == myContact.fixtureA) && (_contacts[i].fixtureB == myContact.fixtureB)) {
-												_contacts.splice(i, 1);
-												return;
-											}
-										}
-								   };
-								   
-	world.SetContactListener(contactListener);	
-	
 	
 	Crafty.sprite(15, "img/ball.png", {
 		ball: [0, 0]
@@ -115,14 +86,16 @@ createPlayerComponents = function(){
 			var dx = 0;
 			
 			if (this.isDown("D")) {
+			  //this.x += this.speed;
 			  dx = this.speed;
 			}
 			if (this.isDown("A")) {
+			  //this.x -= this.speed;
 			  dx = -1 * this.speed;
 			}
 			
-			if (dx != null) {
-			  return this.body.ApplyImpulse(new b2Vec2(dx/PTM_RATIO, 0), this.body.GetWorldCenter());
+			if (dx !== 0) {
+			  return this.body.ApplyImpulse(new b2Vec2(dx/PTM_RATIO, 0), this.body.GetWorldCenter());			  
 			}
 		  });
 		  return this;
@@ -157,7 +130,7 @@ createPlayerComponents = function(){
 
 generateWorld = function() {	
 					
-    walls = Crafty.e("2D, Canvas, Color, Box2D")
+    walls = Crafty.e("2D, Canvas, Color, Box2D, walls")
 				.attr({ x: 0, y: 0})
 				.box2d({
 						bodyType: 'static',
@@ -226,7 +199,25 @@ genterateChars = function(){
 					friction : 0.2,
 					restitution : 1,
 					shape : 'circle'
-				});	
+				})
+			.onContact("GameBlock", 
+							function(data){
+								var block = data[0].obj;								
+								block.remain--;
+								if(block.remain <= 0){								
+									world.DestroyBody(block.body);
+									block.destroy();
+								}else{	
+									block.colorme(block.remain-1);
+								}
+							})
+			.onContact("walls", 
+							function(data){
+								if(data[0].contact.fixtureA === data[0].obj.fixtures[3] ||
+									data[0].contact.fixtureB === data[0].obj.fixtures[3]){
+									Crafty.scene("gameover");
+								}																							
+							});	
 					
 	ball.body.SetBullet(true);
 	var	fx = (Math.random() > 0.5) ? 2 : -2;
@@ -234,7 +225,7 @@ genterateChars = function(){
 	ball.body.ApplyImpulse(force, ball.body.GetWorldCenter());
 	
 	paddle = Crafty.e("2D, Canvas, Color, Box2D, PaddleControls")
-		  .attr({ x: hw-35, y: 580, z: 1, w:270, h:5 })
+		  .attr({ x: hw-35, y: 580, z: 1, w:70, h:5 })
 		  .color("#fff")		  
 		  .box2d({
 						bodyType: 'dynamic',
@@ -242,7 +233,7 @@ genterateChars = function(){
 						friction : 1,
 						restitution : 0
 					})
-		  .paddleControls(70)
+		  .paddleControls(75)
 		  .bind("EnterFrame", 
 						function() {
 							var maxSpeed = 10;							
@@ -289,101 +280,16 @@ genterateChars = function(){
 							restitution : 1
 						});
 		}	 
-	}	
-	
-	Crafty.bind("EnterFrame", onEnterFrame);
-}
-
-addToDestroy = function(otherBody){
-	
-	var totalDestroy = toDestroy.length;
-	if(totalDestroy > 0){
-		for(var i = 0; i < totalDestroy; ++i){	
-			var body = toDestroy[i];
-			
-			if (body.GetUserData() && otherBody.GetUserData()) {
-				var sprite = body.GetUserData();
-				var otherSprite = otherBody.GetUserData();
-				if (sprite.id !== otherSprite.id){
-					toDestroy.push(otherBody);
-				}			
-			}		
-		}
-	}else{
-		toDestroy.push(otherBody);
 	}
 }
 
 destroyWorld = function (){	
-	for(var b = world.GetBodyList(); b; b=b.GetNext()) {    
-		/*if (b.GetUserData()) {
-			var sprite = b.GetUserData(); 
-			world.DestroyBody(sprite.body);
-			sprite.destroy();	
-			sprite = null;			
-		}*/
+	for(var b = world.GetBodyList(); b; b=b.GetNext()) {
 		world.DestroyBody(b);      
 	}
-	_contacts = [];
-	toDestroy = [];
-	Crafty.unbind("EnterFrame", onEnterFrame);
 }
 
 restartgame = function(){
 	Crafty.removeEvent(ctx, "click", restartgame)
 	Crafty.scene("main");
-}
-
-onEnterFrame = function() {
-	var totalContacts = _contacts.length;
-	for(var i = 0; i < totalContacts; ++i){	
-		var contact = _contacts[i];
-		if ((contact.fixtureA === walls.fixtures[3] && contact.fixtureB === ball.fixtures[0]) ||
-			(contact.fixtureA === ball.fixtures[0] && contact.fixtureB === walls.fixtures[3])) {
-			Crafty.scene("gameover");
-		}
-		
-		var bodyA = contact.fixtureA.GetBody();
-		var bodyB = contact.fixtureB.GetBody();
-		if ((bodyA.GetUserData()) && (bodyB.GetUserData())) {
-			var spriteA = bodyA.GetUserData();
-			var spriteB = bodyB.GetUserData();
-	 
-			// Sprite A = ball, Sprite B = Block
-			if (spriteA.isBall && spriteB.isBlock) {
-				bodyB.GetUserData().remain--;
-				if(bodyB.GetUserData().remain <= 0){
-					addToDestroy(bodyB);
-				}else{	
-					bodyB.GetUserData().colorme(bodyB.GetUserData().remain-1);
-				}
-			}
-			// Sprite B = block, Sprite A = ball
-			else if (spriteA.isBlock && spriteB.isBall) {
-				bodyA.GetUserData().remain--;
-				if(bodyA.GetUserData().remain <= 0){
-					addToDestroy(bodyA);
-				}else{						
-					bodyA.GetUserData().colorme(bodyA.GetUserData().remain-1);
-				}
-			}        
-		} 
-	}
-	
-	var totalDestroy = toDestroy.length;
-	for(var j = 0; j < totalDestroy; ++j) {
-		var body = toDestroy[j];     
-		if (body.GetUserData()) {
-			var sprite = body.GetUserData();
-			sprite.destroy();		
-			sprite = null;
-		}
-		world.DestroyBody(body);
-		totalBlocks--;
-		if(totalBlocks === 0){
-			Crafty.scene("gamecomplete");
-		}
-	}
-	
-	toDestroy = [];
 }
