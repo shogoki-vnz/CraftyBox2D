@@ -10,6 +10,7 @@ var   b2Vec2 = Box2D.Common.Math.b2Vec2
          	,	b2DebugDraw = Box2D.Dynamics.b2DebugDraw
 			,	b2MouseJointDef = Box2D.Dynamics.Joints.b2MouseJointDef
 			,	b2PrismaticJointDef = Box2D.Dynamics.Joints.b2PrismaticJointDef
+			,	b2ContactListener = Box2D.Dynamics.b2ContactListener
             ;
 			
 /**@
@@ -150,7 +151,49 @@ Crafty.c("Box2D", {
 			
 			return this;
 		}
-	}
+	},
+	contact:function(comp){
+		var finalresult = [];
+		var entitys = Crafty(comp);		
+		for(entity in entitys){			
+			if(!isNaN(entity)){					
+				var obj = Crafty(entitys[entity]);
+				if(!obj.__c["Box2D"]){
+					return false;
+				}else{					
+					for(_contact in Crafty.box2D.contacts){							
+						var contact = Crafty.box2D.contacts[_contact];							
+						for(i in this.fixtures){
+							var fixtureA = this.fixtures[i];							
+							for(j in obj.fixtures){
+								var fixtureB = obj.fixtures[j];
+								if ((contact.fixtureA === fixtureA && contact.fixtureB === fixtureB) ||
+									(contact.fixtureA === fixtureB && contact.fixtureB === fixtureA)) {
+									
+									finalresult.push(
+														{ 
+															obj: obj, 															
+															contact : contact
+														});							
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		return (finalresult.length) ? finalresult : false;
+	},
+	onContact: function (comp, fn) {
+		this.bind("EnterFrame", function () {
+			var hitdata = this.contact(comp);
+			if (hitdata) {				
+				fn.call(this, hitdata);
+			} 
+		});
+		return this;
+	},
 });
 
 /**@
@@ -161,6 +204,7 @@ Crafty.c("Box2D", {
 Crafty.extend({
 	box2D: {
 		ShowBox2DDebug : false,
+		contacts : null,
 	/**@
 		* #Crafty.box2D.world
 		* @comp Crafty.box2D
@@ -197,6 +241,45 @@ Crafty.extend({
 		 
 			var _PTM_RATIO = ptm_ratio;
 			
+			var _contacts = [];
+			
+			//Add the contactlistener and bind the Crafty EnterFrame	
+			var contactListener = new b2ContactListener;
+			contactListener.BeginContact = function(contact)
+										   {
+												var myContact = { 
+																	fixtureA: contact.GetFixtureA(), 
+																	fixtureB: contact.GetFixtureB() 
+																};
+												
+												//don't add if contact is already in the list
+												for(contact in _contacts){
+													if ((_contacts[contact].fixtureA == myContact.fixtureA) && 
+														(_contacts[contact].fixtureB == myContact.fixtureB)) {													
+															return;
+													}
+												}
+												_contacts.push(myContact);												
+										   };
+										   
+			contactListener.EndContact = function(contact)
+										   {													
+												var myContact = { 
+																	fixtureA: contact.GetFixtureA(), 
+																	fixtureB: contact.GetFixtureB() 
+																};
+																								
+												for(contact in _contacts){
+													if ((_contacts[contact].fixtureA == myContact.fixtureA) && 
+														(_contacts[contact].fixtureB == myContact.fixtureB)) {
+														_contacts.splice(contact, 1);
+														return;
+													}
+												}
+										   };
+										   
+			_world.SetContactListener(contactListener);
+			
 			Crafty.bind("EnterFrame", function() {
 				_world.Step(
 					   1 / 30   //frame-rate
@@ -216,8 +299,8 @@ Crafty.extend({
 						sprite.rotation = Crafty.math.radToDeg(b.GetAngle());
 									
 					}        
-				}
-				
+				}	
+					
 				if(Crafty.box2D.ShowBox2DDebug){
 					_world.DrawDebugData();
 				}
@@ -227,6 +310,7 @@ Crafty.extend({
 			
 			Crafty.box2D.world = _world;
 			Crafty.box2D.PTM_RATIO = _PTM_RATIO;
+			Crafty.box2D.contacts = _contacts;
 		},
 		
 		showDebugInfo : function(){
