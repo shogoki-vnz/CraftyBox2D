@@ -16,7 +16,9 @@ the stage "EnterFrame" event
 
 Once the world has been initialized, you can start to add entitys with the Box2D component
 <code>
-	 var floor = Crafty.e("2D, Canvas, Box2D")
+
+    // Setup floor
+    var floor = Crafty.e("2D, Canvas, Box2D")
 		.attr({ x: 0, y: 0})
 		.box2d({
 			bodyType: 'static',
@@ -25,7 +27,8 @@ Once the world has been initialized, you can start to add entitys with the Box2D
 					[400, 300]
 				]
 		});
-						
+			
+    // Add simple box
     var box = Crafty.e("2D, Canvas, Color, Box2D")
 		 .attr({ x: 0, y: 0, w:20, h:20})
 		 .color("#FF0000")
