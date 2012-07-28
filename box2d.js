@@ -11,6 +11,7 @@ var   b2Vec2 = Box2D.Common.Math.b2Vec2
 			,	b2MouseJointDef = Box2D.Dynamics.Joints.b2MouseJointDef
 			,	b2PrismaticJointDef = Box2D.Dynamics.Joints.b2PrismaticJointDef
 			,	b2ContactListener = Box2D.Dynamics.b2ContactListener
+			,	b2FilterData = Box2D.Dynamics.b2FilterData
             ;
 			
 /**@
@@ -110,6 +111,11 @@ Crafty.c("Box2D", {
 			fixDef.restitution = (!isNaN(fixtureDef.restitution)) ? fixtureDef.restitution : 0.2;
 			fixDef.shape = new b2PolygonShape;
 			
+			fixDef.filter = new b2FilterData;
+
+			fixDef.filter.categoryBits = (!isNaN(fixtureDef.categoryBits)) ? fixtureDef.categoryBits : 0x0001;
+			fixDef.filter.maskBits = (!isNaN(fixtureDef.maskBits)) ? fixtureDef.maskBits : 0xffff;
+			fixDef.filter.groupIndex = (!isNaN(fixtureDef.groupIndex)) ? fixtureDef.groupIndex : 0;
 			//console.log(fixDef);
 			if(!fixtureDef.shape || typeof fixtureDef.shape === "string"){
 				if(fixtureDef.shape === "circle"){
