@@ -21,7 +21,7 @@
         "framework",
         "javascript"
     ],
-    "jsfiddle" : "http://jsfiddle.net/shogoki_vnz/ksUhA/embedded/", 
+    "jsfiddle" : "http://jsfiddle.net/shogoki_vnz/ksUhA/102/embedded/", 
     "homepage": "https://github.com/shogoki-vnz/CraftyBox2D",
     "files": [
         "box2d.js"
