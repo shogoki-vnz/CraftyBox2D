@@ -42,3 +42,5 @@ then we create a box with 20x20 pixels, red color and set the body type to dynam
 the default values. Running the game a see the box falling to the floor.
 
 the are more options that you can set, please see the demo game code for more.
+
+Is very recommended the reading of the [Box2D manual](http://box2d.org/manual.pdf) for a review of all the options that you can use
