@@ -44,35 +44,51 @@ Crafty.c("Box2D", {
 	* @comp Box2D
 	* @sign public void .box2d(Object obj)
 	* @param obj - Object with the bodyType(dynamic, static, kinematic) and fixture data to make
-	* the fist fixture of the body
+	* the fist fixture of the body.
 	*
 	* Create the b2Body and link to the crafty entity, it only need the bodyType
 	* ie: .box2d({bodyType: 'solid'})
 	* this will create a b2Body and make a fixture with the default, the other params of the object,
 	* are the same of the method .addFixture
+	* 
+	* You can pass also a custom b2BodyDef using the argument .bodyDef
+	* ie:
+	* var customDef = new b2BodyDef;
+	* customDef.type = "dynamic";
+	* customDef.position.Set(X, Y);
+	* customDef.angle = ANGLE_IN_RADIANS;
+	* ...
+	* .box2d(bodyDef : customDef);
 	*
 	*/
 	box2d: function(obj) {
 		var world = Crafty.box2D.world;
 		var PTM_RATIO =	Crafty.box2D.PTM_RATIO;
 		var fixDef;
+		var BodyDef;
 		var vertexCount = 0;
-		this.fixtures = [];
-
-		var BodyDef = new b2BodyDef;
-
-		if(obj.bodyType === "dynamic"){
-			BodyDef.type = b2Body.b2_dynamicBody;
-		}else if (obj.bodyType === "static"){
-			BodyDef.type = b2Body.b2_staticBody;
+		this.fixtures = [];		
+		
+		if(obj.bodyDef){
+		
+			var BodyDef = obj.bodyDef;
+			
 		}else{
-			BodyDef.type = b2Body.b2_kinematicBody;
+			var BodyDef = new b2BodyDef;
+
+			if(obj.bodyType === "dynamic"){
+				BodyDef.type = b2Body.b2_dynamicBody;
+			}else if (obj.bodyType === "static"){
+				BodyDef.type = b2Body.b2_staticBody;
+			}else{
+				BodyDef.type = b2Body.b2_kinematicBody;
+			}
+
+
+			BodyDef.position.Set(this._x/PTM_RATIO, this._y/PTM_RATIO);
 		}
-
-
-		BodyDef.position.Set(this._x/PTM_RATIO, this._y/PTM_RATIO);
+		
 		BodyDef.userData = this;
-
 		this.body = world.CreateBody(BodyDef);
 
 		this.addFixture(obj);
