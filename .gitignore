@@ -1,2 +1,4 @@
 .*.sw?
 .DS_store
+/CraftyBox/nbproject/private
+nbproject
