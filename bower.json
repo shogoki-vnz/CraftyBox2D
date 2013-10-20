@@ -20,7 +20,6 @@
     "tests"
   ],
   "dependencies": {
-		"crafty":"0.5.x",
-		"box2dweb":"2.1.0-alpha.3"
+		"crafty":"0.5.x"
   }
 }
