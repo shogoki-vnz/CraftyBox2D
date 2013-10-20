@@ -6,7 +6,7 @@
     "shogoki-vnz"
   ],
   "description": "A Crafty component integrating Box2dWeb",
-  "main": "box2d.js",
+  "main": ["box2d.js","libs/Box2dWeb-2.1.a.3.js"],
   "keywords": [
     "\"Crafty",
     "Box2d\""
