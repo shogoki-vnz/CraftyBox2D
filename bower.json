@@ -1,0 +1,25 @@
+{
+  "name": "CraftyBox2D",
+  "version": "1.0.1",
+  "homepage": "https://github.com/shogoki-vnz/CraftyBox2D",
+  "authors": [
+    "shogoki-vnz"
+  ],
+  "description": "A Crafty component integrating Box2dWeb",
+  "main": ["box2d.js","libs/Box2dWeb-2.1.a.3.js"],
+  "keywords": [
+    "Crafty",
+    "Box2d"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+		"crafty":"0.5.x"
+  }
+}
