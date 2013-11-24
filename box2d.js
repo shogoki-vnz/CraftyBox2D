@@ -133,6 +133,7 @@ Crafty.c("Box2D", {
 			fixDef.density = (!isNaN(setup.density)) ? setup.density : 1;
 			fixDef.friction = (!isNaN(setup.friction)) ? setup.friction : 0.5;
 			fixDef.restitution = (!isNaN(setup.restitution)) ? setup.restitution : 0.2;
+      fixDef.isSensor = Boolean(setup.isSensor);
 
 			// Add some filter stuff
 			fixDef.filter = this._addFilterToFixture(setup);
