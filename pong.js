@@ -39,7 +39,7 @@ gameInit = function(){
         Crafty.load(["img/ball.png"], function () {	
 			createPlayerComponents();             
         });       
-        Crafty.background("#000");
+        Crafty.background("#000000");
         Crafty.e("2D, DOM, Text").attr({ w: 100, h: 20, x: hw-50, y: hh-10 })
                 .text("Loading")
                 .css({ "text-align": "center", "color": "#ffffff"});
@@ -106,7 +106,7 @@ createPlayerComponents = function(){
 		colors : null,
 		init: function() {
 		  this.requires("Color");
-		  this.colors = ["#fff", "#00FF00", "#0000FF" ,"#FF0000"];
+		  this.colors = ["#ffffff", "#00FF00", "#0000FF" ,"#FF0000"];
 		},
 		colorme: function(index) {	
 		  this.color(this.colors[index]);
@@ -226,7 +226,7 @@ genterateChars = function(){
 	
 	paddle = Crafty.e("2D, Canvas, Color, Box2D, PaddleControls")
 		  .attr({ x: hw-35, y: 580, z: 1, w:70, h:5 })
-		  .color("#fff")		  
+		  .color("#ffffff")
 		  .box2d({
 						bodyType: 'dynamic',
 						density : 8,
