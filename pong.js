@@ -35,8 +35,8 @@ gameInit = function(){
 	});
 	
 	
-    Crafty.scene("loading", function () {        
-        Crafty.load(["img/ball.png"], function () {	
+    Crafty.scene("loading", function () {
+        Crafty.load({images: ["img/ball.png"]}, function () {
 			createPlayerComponents();             
         });       
         Crafty.background("#000000");

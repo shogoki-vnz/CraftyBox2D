@@ -59,8 +59,10 @@ gameInit = function(){
 	});
 	
 	
-    Crafty.scene("loading", function () {        
-        Crafty.load(["img/turret.png", "img/shapesBig.png"], function () {	
+    Crafty.scene("loading", function () {
+        Crafty.load({
+            images: ["img/turret.png", "img/shapesBig.png"]
+        }, function () {
 			createPlayerComponents();             
         });
         Crafty.e("2D, DOM, Text").attr({ w: 100, h: 20, x: HW-50, y: HH-10 })
