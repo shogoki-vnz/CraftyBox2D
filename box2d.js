@@ -379,13 +379,18 @@ Crafty.extend({
 				for(var b = _world.GetBodyList(); b; b=b.GetNext()) {
 					if (b.GetUserData()) {
 						var sprite = b.GetUserData();
-						sprite.attr(
+						if(b.GetType() !== 0){ // Non-static bodies update their x/y from the physics step
+							sprite.attr(
 									{
 										x: b.GetPosition().x * _PTM_RATIO,
 										y:b.GetPosition().y * _PTM_RATIO
 									}
 							);
-						sprite.rotation = Crafty.math.radToDeg(b.GetAngle());
+							sprite.rotation = Crafty.math.radToDeg(b.GetAngle());
+						} else { // Static bodies can be updated via sprite.x and sprite.y, which should flow back into the physics simulation.
+							b.SetPosition({ x: sprite.x / _PTM_RATIO, y: sprite.y / _PTM_RATIO });
+						}
+						
 
 					}
 				}
