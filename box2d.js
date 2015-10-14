@@ -92,9 +92,25 @@ Crafty.c("Box2D", {
 		this.body = world.CreateBody(BodyDef);
 
 		this.addFixture(obj);
+		
+		this.bind("Remove", this.box2dRemoved);
+		this.bind("RemoveComponent", this.box2dRemoved);
 
 		return this;
 	},
+	/**@
+	 * #.box2dRemoved
+	 * @comp Box2D
+	 * @sign public void .box2dRemoved(Object component)
+	 * @param component - component that was removed. Undefined if the entity was destroyed.
+	 * 
+	 * Called when the Box2D component is removed or when an entity with the Box2D component on it is destroyed.
+	 */
+	box2dRemoved: function(component){
+		if(typeof component === "undefined" || component === "Box2D")
+			Crafty.box2D.world.DestroyBody(this.body);
+	},
+	
 	/**@
 	* #.addFixture
 	* @comp Box2D
