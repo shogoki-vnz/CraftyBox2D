@@ -369,9 +369,9 @@ Crafty.extend({
 
 			_world.SetContactListener(contactListener);
 
-			Crafty.bind("EnterFrame", function() {
+			Crafty.bind("EnterFrame", function(frameInfo) {
 				_world.Step(
-					   1 / 30   //frame-rate
+					   frameInfo / 1000   //frame-rate
 					,  8       //velocity iterations
 					,  3       //position iterations
 				 );
