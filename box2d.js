@@ -1,18 +1,18 @@
-var   b2Vec2 = Box2D.Common.Math.b2Vec2
-         	,	b2BodyDef = Box2D.Dynamics.b2BodyDef
-         	,	b2Body = Box2D.Dynamics.b2Body
-         	,	b2FixtureDef = Box2D.Dynamics.b2FixtureDef
-         	,	b2Fixture = Box2D.Dynamics.b2Fixture
-         	,	b2World = Box2D.Dynamics.b2World
-         	,	b2MassData = Box2D.Collision.Shapes.b2MassData
-         	,	b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape
-         	,	b2CircleShape = Box2D.Collision.Shapes.b2CircleShape
-         	,	b2DebugDraw = Box2D.Dynamics.b2DebugDraw
-			,	b2MouseJointDef = Box2D.Dynamics.Joints.b2MouseJointDef
-			,	b2PrismaticJointDef = Box2D.Dynamics.Joints.b2PrismaticJointDef
-			,	b2ContactListener = Box2D.Dynamics.b2ContactListener
-			,	b2FilterData = Box2D.Dynamics.b2FilterData
-            ;
+var b2Vec2 = Box2D.Common.Math.b2Vec2
+	, b2BodyDef = Box2D.Dynamics.b2BodyDef
+	, b2Body = Box2D.Dynamics.b2Body
+	, b2FixtureDef = Box2D.Dynamics.b2FixtureDef
+	, b2Fixture = Box2D.Dynamics.b2Fixture
+	, b2World = Box2D.Dynamics.b2World
+	, b2MassData = Box2D.Collision.Shapes.b2MassData
+	, b2PolygonShape = Box2D.Collision.Shapes.b2PolygonShape
+	, b2CircleShape = Box2D.Collision.Shapes.b2CircleShape
+	, b2DebugDraw = Box2D.Dynamics.b2DebugDraw
+	, b2MouseJointDef = Box2D.Dynamics.Joints.b2MouseJointDef
+	, b2PrismaticJointDef = Box2D.Dynamics.Joints.b2PrismaticJointDef
+	, b2ContactListener = Box2D.Dynamics.b2ContactListener
+	, b2FilterData = Box2D.Dynamics.b2FilterData
+	;
 
 /**@
 * #Box2D
@@ -24,13 +24,13 @@ Crafty.c("Box2D", {
 	* #.body
 	* The 'b2Body' element of the entity.
 	*/
-	body : null,
+	body: null,
 
 	/**@
 	* #.fixtures
 	* Array than contains the b2Fixtures of the entity.
 	*/
-	fixtures : null,
+	fixtures: null,
 
 	init: function () {
 		this.requires("2D");
@@ -61,33 +61,33 @@ Crafty.c("Box2D", {
 	* .box2d(bodyDef : customDef);
 	*
 	*/
-	box2d: function(obj) {
+	box2d: function (obj) {
 		var world = Crafty.box2D.world;
-		var PTM_RATIO =	Crafty.box2D.PTM_RATIO;
+		var PTM_RATIO = Crafty.box2D.PTM_RATIO;
 		var fixDef;
 		var BodyDef;
 		var vertexCount = 0;
-		this.fixtures = [];		
-		
-		if(obj.bodyDef){
-		
+		this.fixtures = [];
+
+		if (obj.bodyDef) {
+
 			var BodyDef = obj.bodyDef;
-			
-		}else{
+
+		} else {
 			var BodyDef = new b2BodyDef;
 
-			if(obj.bodyType === "dynamic"){
+			if (obj.bodyType === "dynamic") {
 				BodyDef.type = b2Body.b2_dynamicBody;
-			}else if (obj.bodyType === "static"){
+			} else if (obj.bodyType === "static") {
 				BodyDef.type = b2Body.b2_staticBody;
-			}else{
+			} else {
 				BodyDef.type = b2Body.b2_kinematicBody;
 			}
 
 
-			BodyDef.position.Set(this._x/PTM_RATIO, this._y/PTM_RATIO);
+			BodyDef.position.Set(this._x / PTM_RATIO, this._y / PTM_RATIO);
 		}
-		
+
 		BodyDef.userData = this;
 		this.body = world.CreateBody(BodyDef);
 
@@ -115,7 +115,7 @@ Crafty.c("Box2D", {
 	* If you pass a empty obj, the metod will create a fixture with default values, when the
 	* fixture is made, it's attached to the body and add to the fixtures Array
 	*/
-	addFixture : function(setup) {
+	addFixture: function (setup) {
 
 		var fixDef = {};
 
@@ -126,14 +126,14 @@ Crafty.c("Box2D", {
 
 			fixDef.shape = this._addShapeToFixture(fixDef.shape);
 
-		// Preconfigured fixture
+			// Preconfigured fixture
 		} else {
 
 			fixDef = new b2FixtureDef();
 			fixDef.density = (!isNaN(setup.density)) ? setup.density : 1;
 			fixDef.friction = (!isNaN(setup.friction)) ? setup.friction : 0.5;
 			fixDef.restitution = (!isNaN(setup.restitution)) ? setup.restitution : 0.2;
-      fixDef.isSensor = Boolean(setup.isSensor);
+			fixDef.isSensor = Boolean(setup.isSensor);
 
 			// Add some filter stuff
 			fixDef.filter = this._addFilterToFixture(setup);
@@ -155,7 +155,7 @@ Crafty.c("Box2D", {
 	 * Add filter stuff to the fixDef
 	 * @param {[type]} setup  [description]
 	 */
-	_addFilterToFixture: function(setup) {
+	_addFilterToFixture: function (setup) {
 
 		var filter = new b2FilterData();
 
@@ -166,7 +166,7 @@ Crafty.c("Box2D", {
 		return filter;
 	},
 
-	_addShapeToFixture: function(shapeSetup) {
+	_addShapeToFixture: function (shapeSetup) {
 
 		var shape;
 
@@ -177,15 +177,15 @@ Crafty.c("Box2D", {
 
 			shape = new b2CircleShape(
 				this._w / PTM_RATIO / 2
-			);
+				);
 
 			shape.SetLocalPosition(new b2Vec2(
 				this._w / PTM_RATIO / 2,
 				this._h / PTM_RATIO / 2
-			));
+				));
 
-		// Shape is an array, hopefully..
-		} else if (Object.prototype.toString.call( shapeSetup ) === '[object Array]') {
+			// Shape is an array, hopefully..
+		} else if (Object.prototype.toString.call(shapeSetup) === '[object Array]') {
 
 			shape = new b2PolygonShape();
 			var vertexCount = shapeSetup.length;
@@ -198,7 +198,7 @@ Crafty.c("Box2D", {
 
 			shape.SetAsArray(shapeArray, vertexCount);
 
-		// No, it's a box! (maybe a shape wasn't defined!)
+			// No, it's a box! (maybe a shape wasn't defined!)
 		} else {
 
 			shape = new b2PolygonShape();
@@ -206,8 +206,8 @@ Crafty.c("Box2D", {
 				(this.w / 2) / PTM_RATIO, (this.h / 2) / PTM_RATIO,
 				new b2Vec2(
 					(this.w / 2) / PTM_RATIO, (this.h / 2) / PTM_RATIO
-				)
-			);
+					)
+				);
 		}
 
 		return shape || null;
@@ -232,37 +232,28 @@ Crafty.c("Box2D", {
 	* ~~~
 	* @see .onContact
 	*/
-	contact:function(comp){
+	contact: function (comp) {
 		var finalresult = [];
-		var entitys = Crafty(comp);
-		for(entity in entitys){
-			if(!isNaN(entity)){
-				var obj = Crafty(entitys[entity]);
-				if(!obj.__c["Box2D"]){
+		for (var contactIndex = 0; contactIndex < Crafty.box2D.contacts.length; contactIndex++) {
+			var contact = Crafty.box2D.contacts[contactIndex];
+			var entities = Crafty(comp);
+			for (var entityIndex = 0; entityIndex < entities.length; entityIndex++) {
+				var entity = entities.get(entityIndex);
+				if (!entity.__c["Box2D"])
 					return false;
-				}else{
-					for(_contact in Crafty.box2D.contacts){
-						var contact = Crafty.box2D.contacts[_contact];
-						for(i in this.fixtures){
-							var fixtureA = this.fixtures[i];
-							for(j in obj.fixtures){
-								var fixtureB = obj.fixtures[j];
-								if ((contact.fixtureA === fixtureA && contact.fixtureB === fixtureB) ||
-									(contact.fixtureA === fixtureB && contact.fixtureB === fixtureA)) {
-
-									finalresult.push(
-														{
-															obj: obj,
-															contact : contact
-														});
-								}
-							}
+				for (var fixtureIndexA = 0; fixtureIndexA < this.fixtures.length; fixtureIndexA++) {
+					for (var fixtureIndexB = 0; fixtureIndexB < entity.fixtures.length; fixtureIndexB++) {
+						if ((contact.fixtureA === this.fixtures[fixtureIndexA] && contact.fixtureB === entity.fixtures[fixtureIndexB]) ||
+							(contact.fixtureA === entity.fixtures[fixtureIndexB] && contact.fixtureB === this.fixtures[fixtureIndexA])) {
+							finalresult.push({
+								obj: entity,
+								contact: contact
+							});
 						}
 					}
 				}
 			}
 		}
-
 		return (finalresult.length) ? finalresult : false;
 	},
 	/**@
@@ -292,21 +283,21 @@ Crafty.c("Box2D", {
 */
 Crafty.extend({
 	box2D: {
-		ShowBox2DDebug : false,
-		contacts : null,
-	/**@
-		* #Crafty.box2D.world
-		* @comp Crafty.box2D
-		* This will return the b2World element.
-		*/
-		world : null,
+		ShowBox2DDebug: false,
+		contacts: null,
+		/**@
+			* #Crafty.box2D.world
+			* @comp Crafty.box2D
+			* This will return the b2World element.
+			*/
+		world: null,
 
-	/**@
-		* #Crafty.box2D.PTM_RATIO
-		* @comp Crafty.box2D
-		* This will return the pixel-to-meter ratio used to draw the b2World.
-		*/
-		PTM_RATIO : null,
+		/**@
+			* #Crafty.box2D.PTM_RATIO
+			* @comp Crafty.box2D
+			* This will return the pixel-to-meter ratio used to draw the b2World.
+			*/
+		PTM_RATIO: null,
 
 		/**@
 		* #Crafty.box2D.init
@@ -324,9 +315,9 @@ Crafty.extend({
 		*/
 		init: function (gx, gy, ptm_ratio, doSleep) {
 			var _world = new b2World(
-							   new b2Vec2(gx, gy)    //gravity
-							,  doSleep                 //allow sleep
-						 );
+				new b2Vec2(gx, gy)    //gravity
+				, doSleep                 //allow sleep
+				);
 
 			var _PTM_RATIO = ptm_ratio;
 
@@ -334,63 +325,61 @@ Crafty.extend({
 
 			//Add the contactlistener and bind the Crafty EnterFrame
 			var contactListener = new b2ContactListener;
-			contactListener.BeginContact = function(contact)
-										   {
-												var myContact = {
-																	fixtureA: contact.GetFixtureA(),
-																	fixtureB: contact.GetFixtureB()
+			contactListener.BeginContact = function (contact) {
+				var myContact = {
+					fixtureA: contact.GetFixtureA(),
+					fixtureB: contact.GetFixtureB()
 																};
 
-												//don't add if contact is already in the list
-												for(contact in _contacts){
-													if ((_contacts[contact].fixtureA == myContact.fixtureA) &&
-														(_contacts[contact].fixtureB == myContact.fixtureB)) {
-															return;
-													}
-												}
-												_contacts.push(myContact);
-										   };
+				//don't add if contact is already in the list
+				for (contact in _contacts) {
+					if ((_contacts[contact].fixtureA == myContact.fixtureA) &&
+						(_contacts[contact].fixtureB == myContact.fixtureB)) {
+						return;
+					}
+				}
+				_contacts.push(myContact);
+			};
 
-			contactListener.EndContact = function(contact)
-										   {
-												var myContact = {
-																	fixtureA: contact.GetFixtureA(),
-																	fixtureB: contact.GetFixtureB()
+			contactListener.EndContact = function (contact) {
+				var myContact = {
+					fixtureA: contact.GetFixtureA(),
+					fixtureB: contact.GetFixtureB()
 																};
 
-												for(contact in _contacts){
-													if ((_contacts[contact].fixtureA == myContact.fixtureA) &&
-														(_contacts[contact].fixtureB == myContact.fixtureB)) {
-														_contacts.splice(contact, 1);
-														return;
-													}
-												}
-										   };
+				for (contact in _contacts) {
+					if ((_contacts[contact].fixtureA == myContact.fixtureA) &&
+						(_contacts[contact].fixtureB == myContact.fixtureB)) {
+						_contacts.splice(contact, 1);
+						return;
+					}
+				}
+			};
 
 			_world.SetContactListener(contactListener);
 
-			Crafty.bind("EnterFrame", function() {
+			Crafty.bind("EnterFrame", function () {
 				_world.Step(
-					   1 / 30   //frame-rate
-					,  8       //velocity iterations
-					,  3       //position iterations
-				 );
+					1 / 30   //frame-rate
+					, 8       //velocity iterations
+					, 3       //position iterations
+					);
 
-				for(var b = _world.GetBodyList(); b; b=b.GetNext()) {
+				for (var b = _world.GetBodyList(); b; b = b.GetNext()) {
 					if (b.GetUserData()) {
 						var sprite = b.GetUserData();
 						sprite.attr(
-									{
-										x: b.GetPosition().x * _PTM_RATIO,
-										y:b.GetPosition().y * _PTM_RATIO
-									}
+							{
+								x: b.GetPosition().x * _PTM_RATIO,
+								y: b.GetPosition().y * _PTM_RATIO
+							}
 							);
 						sprite.rotation = Crafty.math.radToDeg(b.GetAngle());
 
 					}
 				}
 
-				if(Crafty.box2D.ShowBox2DDebug){
+				if (Crafty.box2D.ShowBox2DDebug) {
 					_world.DrawDebugData();
 				}
 				_world.ClearForces();
@@ -402,7 +391,7 @@ Crafty.extend({
 			Crafty.box2D.contacts = _contacts;
 		},
 
-		showDebugInfo : function(){
+		showDebugInfo: function () {
 			var _world = Crafty.box2D.world;
 			var _PTM_RATIO = Crafty.box2D.PTM_RATIO;
 
@@ -425,7 +414,7 @@ Crafty.extend({
 				debugDraw.SetFlags(b2DebugDraw.e_shapeBit | b2DebugDraw.e_jointBit);
 				_world.SetDebugDraw(debugDraw);
 				Crafty.box2D.ShowBox2DDebug = true;
-			}else{
+			} else {
 				Crafty.box2D.ShowBox2DDebug = false;
 			}
 		}
