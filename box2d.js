@@ -233,10 +233,12 @@ Crafty.c("Box2D", {
 	* @see .onContact
 	*/
 	contact:function(comp) {
+		if(Crafty.box2D.contacts.length === 0)
+			return false;
+		var entities = Crafty(comp);
 		var finalresult = [];
 		for(var contactIndex = 0; contactIndex < Crafty.box2D.contacts.length; contactIndex++) {
 			var contact = Crafty.box2D.contacts[contactIndex];
-			var entities = Crafty(comp);
 			for(var entityIndex = 0; entityIndex < entities.length; entityIndex++) {
 				var entity = entities.get(entityIndex);
 				if(!entity.__c["Box2D"])
