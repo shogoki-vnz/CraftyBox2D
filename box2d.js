@@ -232,37 +232,30 @@ Crafty.c("Box2D", {
 	* ~~~
 	* @see .onContact
 	*/
-	contact:function(comp){
+	contact:function(comp) {
+		if(Crafty.box2D.contacts.length === 0)
+			return false;
+		var entities = Crafty(comp);
 		var finalresult = [];
-		var entitys = Crafty(comp);
-		for(entity in entitys){
-			if(!isNaN(entity)){
-				var obj = Crafty(entitys[entity]);
-				if(!obj.__c["Box2D"]){
+		for(var contactIndex = 0; contactIndex < Crafty.box2D.contacts.length; contactIndex++) {
+			var contact = Crafty.box2D.contacts[contactIndex];
+			for(var entityIndex = 0; entityIndex < entities.length; entityIndex++) {
+				var entity = entities.get(entityIndex);
+				if(!entity.__c["Box2D"])
 					return false;
-				}else{
-					for(_contact in Crafty.box2D.contacts){
-						var contact = Crafty.box2D.contacts[_contact];
-						for(i in this.fixtures){
-							var fixtureA = this.fixtures[i];
-							for(j in obj.fixtures){
-								var fixtureB = obj.fixtures[j];
-								if ((contact.fixtureA === fixtureA && contact.fixtureB === fixtureB) ||
-									(contact.fixtureA === fixtureB && contact.fixtureB === fixtureA)) {
-
-									finalresult.push(
-														{
-															obj: obj,
-															contact : contact
-														});
-								}
-							}
+				for(var fixtureIndexA = 0; fixtureIndexA < this.fixtures.length; fixtureIndexA++) {
+					for(var fixtureIndexB = 0; fixtureIndexB < this.fixtures.length; fixtureIndexB++) {
+						if((contact.fixtureA === this.fixtures[fixtureIndexA] && contact.fixtureB === entity.fixtures[fixtureIndexB]) ||
+						(contact.fixtureA === entity.fixtures[fixtureIndexB] && contact.fixtureB === this.fixtures[fixtureIndexA])) {
+							finalresult.push({
+								obj: entity,
+								contact: contact
+							});
 						}
 					}
 				}
 			}
 		}
-
 		return (finalresult.length) ? finalresult : false;
 	},
 	/**@
