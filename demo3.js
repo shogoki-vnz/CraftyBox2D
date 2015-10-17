@@ -120,7 +120,7 @@ genterateChars = function(){
 		
 		var fallingElement =  Crafty.e("2D, Canvas, Color, Mouse, Box2D")
 							.origin("center")
-							.color("#fff")
+							.color("#ffffff")
 							.attr({ 
 								x: Crafty.math.randomInt(30, w-100), 
 								y: 0, 

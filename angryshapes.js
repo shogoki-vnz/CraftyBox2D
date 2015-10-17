@@ -59,13 +59,15 @@ gameInit = function(){
 	});
 	
 	
-    Crafty.scene("loading", function () {        
-        Crafty.load(["img/turret.png", "img/shapesBig.png"], function () {	
+    Crafty.scene("loading", function () {
+        Crafty.load({
+            images: ["img/turret.png", "img/shapesBig.png"]
+        }, function () {
 			createPlayerComponents();             
         });
         Crafty.e("2D, DOM, Text").attr({ w: 100, h: 20, x: HW-50, y: HH-10 })
                 .text("Loading")
-                .css({ "text-align": "center", "color": "#000"});
+                .css({ "text-align": "center", "color": "#000000"});
     });   
     Crafty.scene("loading");
 	
@@ -90,7 +92,7 @@ createPlayerComponents = function(){
 			init: function() {
 				this.requires("2D, Color");
 				this.attr({ x: HW - 30, y: 20, z: 1, w:0, h:10 })
-				.color("#000") 
+				.color("#000000");
 			},			
 
 			powerBar: function(speed, bar) {
@@ -115,7 +117,7 @@ generateWorld = function() {
 					
 	floor = Crafty.e("2D, Canvas, Color, Box2D, floor")
 				.attr({ x: 0, y: stage_h-4, w:stage_w, h:4})
-				.color("#000")
+				.color("#000000")
 				.box2d(
 						{
 							bodyType: 'static',
@@ -138,11 +140,11 @@ generateWorld = function() {
 		  
 	var base = Crafty.e("2D, Canvas, Color")
 		  .attr({ x: 35, y: stage_h-20, w: 60, h:20})
-		  .color("#000");
+		  .color("#000000");
 		  
 	var stonehenge = Crafty.e("2D, Canvas, Color, Box2D")
 		  .attr({ x: stage_w - 400, y: stage_h-100, w: 20, h:100})
-		  .color("#000")
+		  .color("#000000")
 		  .box2d(
 						{
 							bodyType: 'dynamic',
@@ -155,7 +157,7 @@ generateWorld = function() {
 					
 	stonehenge = Crafty.e("2D, Canvas, Color, Box2D")
 		  .attr({ x: stage_w - 500, y: stage_h-100, w: 20, h:100})
-		  .color("#000")
+		  .color("#000000")
 		  .box2d(
 						{
 							bodyType: 'dynamic',
@@ -168,7 +170,7 @@ generateWorld = function() {
 					
 	stonehenge = Crafty.e("2D, Canvas, Color, Box2D")
 		  .attr({ x: stage_w - 515, y: stage_h-110, w: 150, h:10})
-		  .color("#000")
+		  .color("#000000")
 		  .box2d(
 						{
 							bodyType: 'dynamic',

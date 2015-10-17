@@ -13,7 +13,7 @@ gameInit = function(){
         var ptm_ratio=32;
         var doSleep=true;
         Crafty.box2D.init(gx, gy, ptm_ratio, doSleep);
-        Crafty.background("#eee");
+        Crafty.background("#eeeeee");
         
         var power_bar_count=16;
 
@@ -21,7 +21,7 @@ gameInit = function(){
 
                 init: function() {
                         this.attr({ x: (stageW-b_size*power_bar_count)/2, y: 20, z: 1, w:1, h:b_size })
-                        .color("#fff") 
+                        .color("#ffffff");
                 },
                 
 
@@ -65,7 +65,7 @@ gameInit = function(){
         
         var dropper = Crafty.e("2D, Canvas, Color, Mouse")
                 .attr({ x: (stageW-(b_size*power_bar_count))/2, y: 0, z: 3, w:b_size*power_bar_count, h:b_size*2 })
-                .color("#ccc")
+                .color("#cccccc")
                 .bind("EnterFrame", function(){
                         if(speedUp===true){
                                 if(speed<speedMax){
@@ -86,7 +86,7 @@ gameInit = function(){
                         var size = Math.ceil((speed/speedMax)*4);
                         var drop = Crafty.e("2D, Canvas, Color, Box2D")
                                         .attr({ x: (stageW-b_size*2)/2, y: 0, z: 1, w:size*b_size, h:size*b_size })
-                                        .color("#0ff")
+                                        .color("#00ffff")
                                         .box2d({
                                                         bodyType: 'dynamic',
                                                         density : speed,
